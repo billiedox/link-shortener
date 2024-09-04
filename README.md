@@ -16,7 +16,7 @@ This project consists of a Vue Vite TypeScript frontend and an Express backend. 
 2. **Navigate to the Frontend Directory:**
 
    ```bash
-   cd TRIAL-TASK
+   cd link-shortener
    ```
 
 3. **Install Dependencies:**
@@ -42,7 +42,7 @@ This project consists of a Vue Vite TypeScript frontend and an Express backend. 
 1. **Navigate to the Backend Directory:**
 
    ```bash
-   cd TRIAL-TASK/server
+   cd link-shortener/server
    ```
 
 2. **Initialize the Node Project:**
