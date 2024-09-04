@@ -1,46 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import NavBar from "./components/navbar";
 import Main from "./components/main";
 import UrlShortener from "./components/urlShortener";
 import Statistics from "./components/statistics";
-import Cta from "./components/cta";
-import Footer from "./components/footer";
 
 function App() {
   const [urls, setUrls] = useState([]);
+
+  async function fetchData() {
+    const resUrl = await axios.get(`${import.meta.env.VITE_API_URL}/urls`);
+    const { data } = resUrl;
+    setUrls(data);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []); 
+
+  const handleRemoveUrl = async (_id) => {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/url/${_id}`);
+    fetchData();
+  };
+
   const handleClick = async (url) => {
     try {
-      // Define the headers
-      const headers = {
-        "Content-Type": "text/plain",
-        apikey: "AtJpfMCXaU61UYkNWnCYtZKCPvh3OQkV",
-      };
-
-      const shortenUrl = "https://api.apilayer.com/short_url/hash";
-      const data = url;
-      const response = await axios.post(shortenUrl, data, { headers });
-
-      setUrls((prevUrls) => {
-        if (prevUrls.length === 0) {
-          return [
-            {
-              org: url,
-              short: response.data.short_url,
-              copied: false,
-            },
-          ];
-        } else {
-          return [
-            {
-              org: url,
-              short: response.data.result.full_short_link,
-              copied: false,
-            },
-            ...prevUrls,
-          ];
-        }
-      });
+      //generate create
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/url/new`, { url });
+      const {data : { short_url }} = res;
+      fetchData();
     } catch (e) {
       console.log(e);
     }
@@ -55,21 +42,18 @@ function App() {
       })
     );
   };
-  console.log(urls);
+
   return (
     <div>
       <div className="container relative my-6 px-3 lg:mx-auto lg:px-[6rem]">
-        {/* <NavBar /> */}
         <Main />
         <div className="relative">
           <UrlShortener handleClick={handleClick} />
         </div>
       </div>
-      {/* <div>
-        <Statistics urlData={urls} handleCopyText={handleCopyText} />
-        <Cta />
-        <Footer />
-      </div> */}
+      <div>
+        <Statistics urlData={urls} handleCopyText={handleCopyText} handleRemoveUrl={handleRemoveUrl}  />
+      </div>
     </div>
   );
 }

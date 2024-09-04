@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 function UrlShortener({ handleClick }) {
   const [url, setUrl] = useState("");
-  const validateUrl = (url) => {
+  const validateUrl = (url:string) => {
     const regex = new RegExp(
       "(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?"
     );
